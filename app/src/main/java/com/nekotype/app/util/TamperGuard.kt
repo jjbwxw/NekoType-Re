@@ -7,11 +7,12 @@ import java.io.File
 
 /**
  * 防篡改防护：
- * 1. 签名校验 —— 重打包（改 smali/字节码后重新签名）签名必然变化，直接拦截；
- * 2. Hook 框架检测 —— 检测 Xposed / LSPosed 等运行时修改返回值的手段（提高门槛）。
+ * 1. 签名校验 —— 重打包（改 smali/字节码后重新签名）签名必然变化。二改版起只记录
+ *    不拦截：GPL-3.0 §6 不允许对修改版的运行施加额外限制（自签编译的 release 也应
+ *    能运行），校验结果只进日志、详情页可见；
+ * 2. Hook 框架检测 —— 检测 Xposed / LSPosed 等运行时修改返回值的手段，命中仍拦截。
  *
- * 说明：这是纯本地方案能做的最高防线；root + Hook 框架可绕过（物理极限），
- * 但能挡住绝大多数"反编译改字节码重打包"的破解。
+ * 说明：这是纯本地方案能做的最高防线；root + Hook 框架可绕过（物理极限）。
  */
 object TamperGuard {
 
@@ -20,8 +21,8 @@ object TamperGuard {
 
     /**
      * 校验当前 APK 签名是否匹配发布签名（重打包后签名必然变化）。
-     * debug 构建（FLAG_DEBUGGABLE）直接放行：开发调试用 debug 证书，与发布证书必然不同，
-     * 不放行的话开发包装上就被判「已篡改」无法运行；release 包仍强制校验，防重打包保护不受影响。
+     * 结果只作信息：debug 构建（FLAG_DEBUGGABLE）直接返回 true；其余不匹配返回 false，
+     * 处理方式由调用方决定——二改版起不据此拦截（见类注释），Hook 检测仍拒绝运行。
      */
     fun isSignatureValid(context: Context): Boolean {
         if (context.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE != 0) return true

@@ -289,6 +289,9 @@ object LegalDocs {
             NekoType 开源许可
             更新日期：2026-11-11
 
+            二改说明：本版本是官方 NekoType v2.9.9 的二次开发版（2026-11），
+            新增 AI 改写，包名改为 com.nekotype.app.re，可与官方版共存。
+
             本应用基于以下开源项目构建，在此致谢并保留其原始许可：
 
             【Apache License 2.0】
@@ -341,6 +344,9 @@ object LegalDocs {
             NekoType 開源授權
             更新日期：2026-11-11
 
+            二改說明：本版本是官方 NekoType v2.9.9 的二次開發版（2026-11），
+            新增 AI 改寫，套件名改為 com.nekotype.app.re，可與官方版共存。
+
             本應用基於以下開源專案建置，在此致謝並保留其原始授權：
 
             【Apache License 2.0】
@@ -392,6 +398,10 @@ object LegalDocs {
         else -> """
             NekoType Open Source Licenses
             Last updated: 2026-11-11
+
+            Fork notice: this build is a fork of the official NekoType v2.9.9
+            (Nov 2026) — it adds AI rewriting, renames the package to
+            com.nekotype.app.re, and can coexist with the official app.
 
             This app is built on the following open-source projects. Thanks to their authors;
             their original licenses are retained.

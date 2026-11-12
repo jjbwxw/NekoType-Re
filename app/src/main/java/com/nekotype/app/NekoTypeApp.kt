@@ -34,8 +34,13 @@ class NekoTypeApp : Application() {
         Thread {
             try { com.nekotype.app.module.ModuleManager.loadAll(this) } catch (_: Throwable) { }
         }.start()
-        // 防篡改检测：签名不匹配（重打包）或检测到 Hook 框架 → 标记，各入口拒绝运行
-        val tampered = !TamperGuard.isSignatureValid(this) || TamperGuard.hasHookFramework()
+        // 防篡改检测：Hook 框架 → 标记拦截（各入口拒绝运行）；
+        // 签名不匹配降级为只记日志不拦截——GPL-3.0 §6 不允许对修改版的运行施加额外限制，
+        // 别人拿源码自签编译的 release 也应能运行，且本仓库分发的本来就是 debug 签名包
+        val sigOk = TamperGuard.isSignatureValid(this)
+        val tampered = TamperGuard.hasHookFramework()
+        if (!sigOk) com.nekotype.app.util.NekoLog.warn("签名与官方发布证书不一致（只留痕，不拦截）")
+        if (tampered) com.nekotype.app.util.NekoLog.warn("检测到 Hook 框架，防篡改拦截生效")
         if (tampered != AppPrefs.tampered) {
             AppPrefs.tampered = tampered
         }
